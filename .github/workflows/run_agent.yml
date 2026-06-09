@@ -1,0 +1,52 @@
+# GitHub Actions: イベント管理エージェント 定期実行ワークフロー
+# 毎日 JST 7:00 (UTC 22:00) に実行します
+
+name: Run Event Agent
+
+on:
+  schedule:
+    - cron: "0 22 * * *"   # UTC 22:00 = JST 07:00
+  workflow_dispatch:         # 手動実行も可能
+    inputs:
+      dry_run:
+        description: "Dry run (Notionに登録しない)"
+        required: false
+        default: "false"
+      source:
+        description: "収集ソース (all / connpass / doorkeeper / peatix / prtimes)"
+        required: false
+        default: "all"
+
+jobs:
+  run-agent:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Event Agent
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          INTEREST_KEYWORDS: ${{ secrets.INTEREST_KEYWORDS }}
+          AI_SCORE_THRESHOLD: "0.6"
+          COLLECT_DAYS_AHEAD: "30"
+          CONNPASS_COUNT: "100"
+        run: |
+          DRY_RUN_FLAG=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            DRY_RUN_FLAG="--dry-run"
+          fi
+          SOURCE="${{ github.event.inputs.source || 'all' }}"
+          python main.py $DRY_RUN_FLAG --source "$SOURCE"
