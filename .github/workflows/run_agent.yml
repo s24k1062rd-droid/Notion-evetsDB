@@ -1,11 +1,11 @@
 # GitHub Actions: イベント管理エージェント 定期実行ワークフロー
-# 毎日 JST 7:00 (UTC 22:00) に実行します
+# 毎日 JST 6:00 (UTC 21:00) に実行します
 
 name: Run Event Agent
 
 on:
   schedule:
-    - cron: "0 22 * * *"   # UTC 22:00 = JST 07:00
+    - cron: "0 21 * * *"   # UTC 21:00 = JST 06:00
   workflow_dispatch:         # 手動実行も可能
     inputs:
       dry_run:
