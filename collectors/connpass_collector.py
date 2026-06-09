@@ -37,7 +37,9 @@ class ConnpassCollector:
             "end_ymd": (today + timedelta(days=settings.COLLECT_DAYS_AHEAD)).strftime("%Y%m%d"),
         }
 
-        headers = {}
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
         if settings.CONNPASS_API_KEY:
             headers["Authorization"] = f"Bearer {settings.CONNPASS_API_KEY}"
 

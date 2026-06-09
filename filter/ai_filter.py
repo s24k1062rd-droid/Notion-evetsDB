@@ -55,7 +55,8 @@ class AIFilter:
             batch_results = self._score_batch(batch)
             results.extend(batch_results)
             if i + batch_size < len(events):
-                time.sleep(2)  # レート制限対策
+                # Gemini API 無料枠のレート制限 (15 RPM等) 対策として長めに待機
+                time.sleep(10)
 
         filtered = [r for r in results if r.score >= settings.AI_SCORE_THRESHOLD]
         logger.info(

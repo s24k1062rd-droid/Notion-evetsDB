@@ -38,7 +38,7 @@ jobs:
         env:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           INTEREST_KEYWORDS: ${{ secrets.INTEREST_KEYWORDS }}
           AI_SCORE_THRESHOLD: "0.6"
           COLLECT_DAYS_AHEAD: "30"
